@@ -13,6 +13,11 @@ public class Train {
     Carriage[] passengerSecondClassCarriages;
     Carriage[] cargoCarriages;
 
+    // TODO avoid this (use a different structure?)
+//    int currentIndexPassengerFirstClass;
+//    int currentIndexPassengerSecondClass;
+//    int currentIndexCargo;
+
     public Train(
             int passengerFirstClassCarriagesNumber,
             int passengerSecondClassCarriagesNumber,
@@ -21,11 +26,39 @@ public class Train {
         this.passengerFirstClassCarriages = new Carriage[passengerFirstClassCarriagesNumber];
         this.passengerSecondClassCarriages = new Carriage[passengerSecondClassCarriagesNumber];
         this.cargoCarriages = new Carriage[cargoCarriagesNumber];
+
+        // this.currentIndexPassengerFirstClass = 0;
+        // this.currentIndexPassengerSecondClass = 0;
+        // this.currentIndexCargo = 0;
+
+        // Now add carriages
+        if (passengerFirstClassCarriagesNumber > 0) {
+            for (int i = 0; i < passengerFirstClassCarriagesNumber; i++) {
+                this.addCarriage(new Carriage("passenger class 1"), i);
+            }
+        }
+        // TODO passengerSecondClassCarriages
+        // TODO cargoCarriages
+
     }
 
     @Override
     public String toString(){
-        return "Train goes from " + this.departurePlace + " to " + this.destinationPlace; // TODO add train scheme
+        return "Train goes from " + this.departurePlace + " to " + this.destinationPlace  + "\n" +
+                "Train scheme: " + this.passengerFirstClassCarriages[0]; // TODO update train scheme
+    }
+
+    public void addCarriage(Carriage carriage, int index) {
+        if (carriage.type.equals("passenger class 1")) {
+            this.passengerFirstClassCarriages[index] = carriage;
+            // this.currentIndexPassengerFirstClass++;
+        } else if (carriage.type.equals("passenger class 3")) {
+            this.passengerSecondClassCarriages[index] = carriage;
+            // this.currentIndexPassengerSecondClass++;
+        } else if (carriage.type.equals("cargo")) {
+            this.cargoCarriages[index] = carriage;
+            // this.currentIndexCargo++;
+        }
     }
 
     public void setItinerary(String departurePlace, String destinationPlace) {
