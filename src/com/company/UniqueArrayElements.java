@@ -6,28 +6,26 @@
 public class UniqueArrayElements {
 
     public static void main(String[] args) {
-        int[] array = {1, 4, 5, 1, 1, 3};
+        int[] array = {1, 4, 5, 1, 1, 3, 8, 8};
+        // int[] uniqueElements = new int[array.length];
         int uniqueElsNumber = 0;
 
         for (int i = 0; i < array.length; i++) {
-            System.out.println("-----" + array[i]);
-            // uniqueElsNumber++;
             boolean isUnique = true;
-            for (int j = i + 1; j < array.length; j++) {
-                System.out.println("--" + array[j]);
-                if (array[i] == array[j]) {
+            for (int j = 0; j < array.length; j++) {
+                if (array[i] == array[j] && i != j) {
                     isUnique = false;
+                    // break;
                 }
-                if (isUnique) {
-                    uniqueElsNumber++;
-                }  // TODO: need to check backwards
-
-
+            }
+            if (isUnique) {
+                uniqueElsNumber++;
+                // uniqueElements[i] = array[i];
             }
 
         }
 
-        System.out.println(uniqueElsNumber);
+        System.out.println("Number of unique elements is " + uniqueElsNumber);
     }
 
 }
