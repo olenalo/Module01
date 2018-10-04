@@ -7,14 +7,14 @@
 public class UniqueArrayElements {
 
     private static boolean checkIfCounted(int element, int[] array) {
-        boolean isPresent = false;
+        boolean isCounted = false;
         for (int el: array) {
             if (element == el) {
-                isPresent = true;
+                isCounted = true;
                 break;
             }
         }
-        return isPresent;
+        return isCounted;
     }
 
     private static int countUniqueElements(int[] array) {
