@@ -6,9 +6,15 @@ import java.util.Random;
 
 public class Train {
 
+    static final String locomotiveClassTitle = "locomotive";
+    static final String passengerFirstClassTitle = "passenger class 1";
+    static final String passengerSecondClassTitle = "passenger class 2";
+    static final String cargoTitle = "cargo";
+
     String departurePlace;  // city name
     String destinationPlace;  // city name
     Carriage locomotive;
+    // Creating separate arrays, each of them will have different types (per carriage type)
     Carriage[] passengerFirstClassCarriages;
     Carriage[] passengerSecondClassCarriages;
     Carriage[] cargoCarriages;
@@ -17,44 +23,53 @@ public class Train {
             int passengerFirstClassCarriagesNumber,
             int passengerSecondClassCarriagesNumber,
             int cargoCarriagesNumber) {
-        this.locomotive = new Carriage("locomotive"); // Always present
+        this.locomotive = new Carriage(Train.locomotiveClassTitle); // Always present
         this.passengerFirstClassCarriages = new Carriage[passengerFirstClassCarriagesNumber];
         this.passengerSecondClassCarriages = new Carriage[passengerSecondClassCarriagesNumber];
         this.cargoCarriages = new Carriage[cargoCarriagesNumber];
 
         // Now add carriages
-        this.addCarriages("passenger class 1", passengerFirstClassCarriagesNumber);
-        this.addCarriages("passenger class 2", passengerSecondClassCarriagesNumber);
-        this.addCarriages("cargo", cargoCarriagesNumber);
+        this.addCarriages(Train.passengerFirstClassTitle, passengerFirstClassCarriagesNumber);
+        this.addCarriages(Train.passengerSecondClassTitle, passengerSecondClassCarriagesNumber);
+        this.addCarriages(Train.cargoTitle, cargoCarriagesNumber);
     }
 
     @Override
     public String toString(){
         return "Train goes from " + this.departurePlace + " to " + this.destinationPlace  + "\n" +
-                "Train scheme: " + this.desribeTrainScheme(); // TODO update train scheme
+                "Train scheme: " + this.desribeTrainScheme();
     }
 
     public String desribeTrainScheme() {
-        String trainSchemeDescr = "<:locomotive]=";  // Let them go first
+        String trainSchemeDescr = this.locomotive + "=";  // TODO locomotive starts with "<:"
 
         // Let 2nd class go first
+        for (Carriage carriage: this.passengerSecondClassCarriages) {
+            if (carriage != null) {
+                trainSchemeDescr += carriage + "=";
+            }
+        }
+        // TODO: DRY
         for (Carriage carriage: this.passengerFirstClassCarriages) {
             if (carriage != null) {
                 trainSchemeDescr += carriage + "=";
             }
         }
-
-        // TODO describe other carriages
+        for (Carriage carriage: this.cargoCarriages) {
+            if (carriage != null) {
+                trainSchemeDescr += carriage + "="; // TODO: remove the last "="
+            }
+        }
 
         return trainSchemeDescr;
     }
 
     public void addCarriage(Carriage carriage, int index) {
-        if (carriage.type.equals("passenger class 1")) {
+        if (carriage.type.equals(Train.passengerFirstClassTitle)) {
             this.passengerFirstClassCarriages[index] = carriage;
-        } else if (carriage.type.equals("passenger class 3")) {
+        } else if (carriage.type.equals(Train.passengerSecondClassTitle)) {
             this.passengerSecondClassCarriages[index] = carriage;
-        } else if (carriage.type.equals("cargo")) {
+        } else if (carriage.type.equals(Train.cargoTitle)) {
             this.cargoCarriages[index] = carriage;
         }
     }
@@ -85,9 +100,9 @@ public class Train {
         @Override
         public String toString() {
             String loadFormat = ""; // Will apply for locomotive
-            if (this.type.equals("cargo")) {
+            if (this.type.equals(Train.cargoTitle)) {
                 loadFormat = this.load + "%";
-            } else if (this.type.equals("passenger class 1") || this.type.equals("passenger class 2")) {
+            } else if (this.type.equals(Train.passengerFirstClassTitle) || this.type.equals(Train.passengerSecondClassTitle)) {
                 loadFormat = "1:" + this.load;
             }
             return "[:" + this.type + ":" + loadFormat +  "]";
@@ -95,13 +110,13 @@ public class Train {
 
         public int generateRandomLoad() {
             int bound = 100;
-            if (this.type == "cargo") {
+            if (this.type == Train.cargoTitle) {
                 bound = 100; // it's actually percentage
-            } else if (this.type.equals("passenger class 1")) {
+            } else if (this.type.equals(Train.passengerFirstClassTitle)) {
                 bound = 100;
-            } else if (this.type.equals("passenger class 2")) {
+            } else if (this.type.equals(Train.passengerSecondClassTitle)) {
                 bound = 200;
-            } else if (this.type.equals("locomotive")) { // Could be `else`, but wanna make it explicit
+            } else if (this.type.equals(Train.locomotiveClassTitle)) { // Could be `else`, but wanna make it explicit
                 bound = 1; // Doesn't apply for locomotive, but bound must be positive... TODO: consider refactoring
             }
             return new Random().nextInt(bound);
@@ -111,12 +126,19 @@ public class Train {
 
 
     public static void main(String[] args) {
-        Train train = new Train(1, 1, 1);
+        Train train = new Train(2, 1, 3);
         train.setItinerary("Kharkiv", "Kyiv");
         System.out.println(train);
 
+        /*
         Carriage sampleCarriage = new Carriage("cargo");
         System.out.println(sampleCarriage);
+
+        for (Carriage carr: train.passengerSecondClassCarriages) {
+            System.out.println(carr);
+        }
+        */
+
 
     }
 }
