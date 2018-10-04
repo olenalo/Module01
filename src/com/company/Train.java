@@ -13,11 +13,6 @@ public class Train {
     Carriage[] passengerSecondClassCarriages;
     Carriage[] cargoCarriages;
 
-    // TODO avoid this (use a different structure?)
-//    int currentIndexPassengerFirstClass;
-//    int currentIndexPassengerSecondClass;
-//    int currentIndexCargo;
-
     public Train(
             int passengerFirstClassCarriagesNumber,
             int passengerSecondClassCarriagesNumber,
@@ -27,19 +22,10 @@ public class Train {
         this.passengerSecondClassCarriages = new Carriage[passengerSecondClassCarriagesNumber];
         this.cargoCarriages = new Carriage[cargoCarriagesNumber];
 
-        // this.currentIndexPassengerFirstClass = 0;
-        // this.currentIndexPassengerSecondClass = 0;
-        // this.currentIndexCargo = 0;
-
         // Now add carriages
-        if (passengerFirstClassCarriagesNumber > 0) {
-            for (int i = 0; i < passengerFirstClassCarriagesNumber; i++) {
-                this.addCarriage(new Carriage("passenger class 1"), i);
-            }
-        }
-        // TODO passengerSecondClassCarriages
-        // TODO cargoCarriages
-
+        this.addCarriages("passenger class 1", passengerFirstClassCarriagesNumber);
+        this.addCarriages("passenger class 2", passengerSecondClassCarriagesNumber);
+        this.addCarriages("cargo", cargoCarriagesNumber);
     }
 
     @Override
@@ -51,13 +37,18 @@ public class Train {
     public void addCarriage(Carriage carriage, int index) {
         if (carriage.type.equals("passenger class 1")) {
             this.passengerFirstClassCarriages[index] = carriage;
-            // this.currentIndexPassengerFirstClass++;
         } else if (carriage.type.equals("passenger class 3")) {
             this.passengerSecondClassCarriages[index] = carriage;
-            // this.currentIndexPassengerSecondClass++;
         } else if (carriage.type.equals("cargo")) {
             this.cargoCarriages[index] = carriage;
-            // this.currentIndexCargo++;
+        }
+    }
+
+    public void addCarriages(String type, int carriagesNumber) {
+        if (carriagesNumber > 0) {
+            for (int i = 0; i < carriagesNumber; i++) {
+                this.addCarriage(new Carriage(type), i);
+            }
         }
     }
 
@@ -85,11 +76,11 @@ public class Train {
             int bound = 100;
             if (this.type == "cargo") {
                 bound = 100; // it's actually percentage
-            } else if (this.type == "passenger class 1") {
+            } else if (this.type.equals("passenger class 1")) {
                 bound = 100;
-            } else if (this.type == "passenger class 2") {
+            } else if (this.type.equals("passenger class 2")) {
                 bound = 200;
-            } else if (this.type == "locomotive") { // Ccould be `else`, but wanna make it explicit
+            } else if (this.type.equals("locomotive")) { // Could be `else`, but wanna make it explicit
                 bound = 1; // Doesn't apply for locomotive, but bound must be positive... TODO: consider refactoring
             }
             return new Random().nextInt(bound);
