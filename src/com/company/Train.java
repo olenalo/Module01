@@ -4,9 +4,10 @@ public class Train {
     String departurePlace;  // city name
     String destinationPlace;  // city name
     Carriage locomotive;
-    Carriage[] passengerFirstClassCarriages;
-    Carriage[] passengerSecondClassCarriages;
-    Carriage[] cargoCarriages;
+    Carriage[] carriages;
+    int passengerFirstClassCarriagesNumber;
+    int passengerSecondClassCarriagesNumber;
+    int cargoCarriagesNumber;
 
     public Train(
             int passengerFirstClassCarriagesNumber,
@@ -14,9 +15,10 @@ public class Train {
             int cargoCarriagesNumber) {
         // TODO: check (numbers must be non-negative)
         this.locomotive = new LocomotiveCarriage(); // Always present
-        this.passengerFirstClassCarriages = new PassengerFirstClassCarriage[passengerFirstClassCarriagesNumber];
-        this.passengerSecondClassCarriages = new PassengerSecondClassTitleCarriage[passengerSecondClassCarriagesNumber];
-        this.cargoCarriages = new CargoCarriage[cargoCarriagesNumber];
+        this.carriages = new Carriage[passengerFirstClassCarriagesNumber + passengerSecondClassCarriagesNumber + cargoCarriagesNumber];
+        this.passengerFirstClassCarriagesNumber = passengerFirstClassCarriagesNumber;
+        this.passengerSecondClassCarriagesNumber = passengerSecondClassCarriagesNumber;
+        this.cargoCarriagesNumber = cargoCarriagesNumber;
     }
 
     @Override
@@ -25,46 +27,45 @@ public class Train {
                 "Train scheme: " + this.describeTrainScheme();
     }
 
-    public static String updateDescription(String trainSchemeDescr, Carriage[] carriages) {
-        for (int i = 0; i < carriages.length; i++) {
-            if (carriages[i] != null) {
-                trainSchemeDescr += carriages[i];
+    public String updateDescription(String trainSchemeDescription) {
+        for (int i = 0; i < this.carriages.length; i++) {
+            if (this.carriages[i] != null) {
+                trainSchemeDescription += this.carriages[i];
                 // No trail for the last carriage
-                if (i != carriages.length - 1) {
-                    trainSchemeDescr += "=";
+                if (i != this.carriages.length - 1) {
+                    trainSchemeDescription += "=";
                 }
             }
         }
-        return trainSchemeDescr;
-    }
-
-    public String describeTrainScheme() {
-        String trainSchemeDescription = this.locomotive + "=";
-        // Let 2nd class go first; assume the order never changes
-        trainSchemeDescription = updateDescription(trainSchemeDescription, this.passengerSecondClassCarriages);
-        trainSchemeDescription = updateDescription(trainSchemeDescription, this.passengerFirstClassCarriages);
-        trainSchemeDescription = updateDescription(trainSchemeDescription, this.cargoCarriages);
         return trainSchemeDescription;
     }
 
+    public String describeTrainScheme() {
+        return updateDescription(this.locomotive + "=");
+    }
+
     public void addCarriages() {
-        Carriage carriage;
-        if (this.passengerFirstClassCarriages.length > 0) {
-            for (int i = 0; i < this.passengerFirstClassCarriages.length; i++) {
-                carriage = new PassengerFirstClassCarriage();
-                this.passengerFirstClassCarriages[i] = carriage;
+        int index = 0;
+
+        // Assume the order never changes (2nd pass -> 1st pass -> cargo, as per sample display)
+        if (this.passengerSecondClassCarriagesNumber > 0) {
+            int i;
+            for (i = index; i < this.passengerSecondClassCarriagesNumber; i++) {
+                this.carriages[i] = new PassengerSecondClassTitleCarriage();
             }
+            index += this.passengerSecondClassCarriagesNumber;
         }
-        if (this.passengerSecondClassCarriages.length > 0) {
-            for (int i = 0; i < this.passengerSecondClassCarriages.length; i++) {
-                carriage = new PassengerSecondClassTitleCarriage();
-                this.passengerSecondClassCarriages[i] = carriage;
+        if (this.passengerFirstClassCarriagesNumber > 0) {
+            int i;
+            for (i = index; i < index + this.passengerFirstClassCarriagesNumber; i++) {
+                this.carriages[i] = new PassengerFirstClassCarriage();
             }
+            index += this.passengerFirstClassCarriagesNumber;
         }
-        if (this.cargoCarriages.length > 0) {
-            for (int i = 0; i < this.cargoCarriages.length; i++) {
-                carriage = new CargoCarriage();
-                this.cargoCarriages[i] = carriage;
+        if (this.cargoCarriagesNumber > 0) {
+            int i;
+            for (i = index; i < index + this.cargoCarriagesNumber; i++) {
+                this.carriages[i] = new CargoCarriage();
             }
         }
     }
