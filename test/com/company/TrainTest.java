@@ -17,11 +17,7 @@ class TrainTest {
     }
 
     @Test
-    void desribeTrainScheme() {
-    }
-
-    @Test
-    void addCarriage() {
+    void describeTrainScheme() {
     }
 
     @Test

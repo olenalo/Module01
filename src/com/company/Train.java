@@ -49,22 +49,19 @@ public class Train {
 
         // Assume the order never changes (2nd pass -> 1st pass -> cargo, as per sample display)
         if (this.passengerSecondClassCarriagesNumber > 0) {
-            int i;
-            for (i = index; i < this.passengerSecondClassCarriagesNumber; i++) {
+            for (int i = index; i < this.passengerSecondClassCarriagesNumber; i++) {
                 this.carriages[i] = new PassengerSecondClassTitleCarriage();
             }
             index += this.passengerSecondClassCarriagesNumber;
         }
         if (this.passengerFirstClassCarriagesNumber > 0) {
-            int i;
-            for (i = index; i < index + this.passengerFirstClassCarriagesNumber; i++) {
+            for (int i = index; i < index + this.passengerFirstClassCarriagesNumber; i++) {
                 this.carriages[i] = new PassengerFirstClassCarriage();
             }
             index += this.passengerFirstClassCarriagesNumber;
         }
         if (this.cargoCarriagesNumber > 0) {
-            int i;
-            for (i = index; i < index + this.cargoCarriagesNumber; i++) {
+            for (int i = index; i < index + this.cargoCarriagesNumber; i++) {
                 this.carriages[i] = new CargoCarriage();
             }
         }

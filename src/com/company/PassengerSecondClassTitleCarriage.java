@@ -8,7 +8,6 @@ public class PassengerSecondClassTitleCarriage extends Carriage {
         this.type = PASSENGER_CLASS_2;
         this.maxLoad = MAX_LOAD;
         this.load = this.generateRandomLoad();
-
     }
 
     @Override

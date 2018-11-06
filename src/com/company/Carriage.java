@@ -8,6 +8,6 @@ public class Carriage {
     public int maxLoad;
 
     public int generateRandomLoad() {
-        return new Random().nextInt(this.maxLoad); // TODO check that for 2nd class PASS, max is 200
+        return new Random().nextInt(this.maxLoad);
     }
 }
